@@ -72,7 +72,7 @@ class SoundcloudItem extends React.Component {
             if(!(artwork_url)){ 
                 artwork_url = 'https://worldvectorlogo.com/logos/soundcloud-icon.svg';
             }
-            // img = artwork_url ? (<img src={artwork_url} />) : '';
+
             var img = <img src={artwork_url} size= "200" />
 
             var sounds = <div src={sounds}> </div>
@@ -111,7 +111,10 @@ class SoundcloudItem extends React.Component {
                 </div>
 
                 <div className="soundbar"> 
-                    {track_title} {username} 
+                    {track_title} 
+                    <div className="soundbar">
+                    {username} 
+                    </div>
                     <div className="icon_top"> <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px"
                      viewBox="0 0 24 24" enable-background="new 0 0 24 24">
                 <path d="M12,5V1L7,6l5,5V7c3.3,0,6,2.7,6,6s-2.7,6-6,6s-6-2.7-6-6H4c0,4.4,3.6,8,8,8s8-3.6,8-8S16.4,5,12,5z"/>
@@ -139,15 +142,16 @@ class SoundcloudItem extends React.Component {
                         </svg>
                     </div>
 
-                    <div className="icon_bottom">
-                        {favorites}
-                    </div>
 
                     <div className="icon_bottom">
                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px"
                          viewBox="0 0 24 24" enable-background="new 0 0 24 24" >
                         <path d="M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10S17.5,2,12,2z M10,16.5v-9l6,4.5L10,16.5z"/>
                         </svg>
+                    </div>
+
+                    <div className="icon_bottom">
+                        {favorites}
                     </div>
 
                     <div className="icon_bottom">
