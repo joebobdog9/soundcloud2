@@ -1,0 +1,192 @@
+
+@import "../bower_components/normalize-css/normalize.css";
+@import "../bower_components/typeplate-starter-kit/css/typeplate.css";
+
+/**
+ * BOX-SIZING
+ */
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+/**
+ * GRIDS
+ */
+
+.grid {
+    width: 100%;
+    display: block;
+    font-size: 0;
+    text-align: justify;
+    position: relative;
+    & > * {
+        font-size: medium;
+        text-align: left;
+        display: inline-block;
+        width: 100%;
+        vertical-align: top;
+    }
+    &:after {
+        display: inline-block;
+        width: 100%;
+        content: "";
+        font-size: medium;
+    }
+}
+
+@define-mixin gridify $col, $width, $gutter: 2 {
+    @media only screen and (min-width: $(width)px) {
+        .grid-$(col)-$(width) {
+            & > * {
+                width: calc((100 / $col) - $gutter)%;
+            }
+            @mixin-content;
+        }
+    }
+}
+
+@mixin gridify 2, 400 {}
+@mixin gridify 4, 600 {}
+
+/**
+ * PACE (automatic pre-loader thingy)
+ */
+
+.pace {
+    pointer-events: none;
+    user-select: none;
+    transition: all 1s ease;
+    .pace-progress {
+        background: #2299dd;
+        position: fixed;
+        z-index: 2000;
+        top: 0;
+        right: 100%;
+        width: 100%;
+        height: 2px;
+        transition: all 1s ease;
+    }
+}
+
+.pace-inactive {
+    opacity: 0;
+}
+
+.pace-active {
+    opacity: 1;
+}
+/**
+ * GENERAL
+ */
+
+img {
+
+}
+/**
+ * YOUR CODE HERE
+ */
+
+a{
+    display: inline-block;
+    vertical-align: left;
+}
+ .container{
+    width: 800px;
+     
+    font-family: verdana;
+    color: #666;
+    font-size: .75rem;  
+ }
+.soundbar{
+    position: absolute;
+    display: inline-block;
+    vertical-align: right;   
+    height: 9%;
+    padding: 0px 0px 0px 0px;
+    float:right;
+    border: 1px solid  #aaaaaa; 
+    overflow: hidden;   
+    border-left: none;
+    width: 600px;
+
+.icon_top{
+   svg{
+    width: 5%;
+    height: 5%;
+    fill: #666;
+    fill: rgb(255,60, 0); 
+    }
+}
+    
+}
+
+.sounds{
+    position: absolute;
+    display: block;  
+    height: 19%;
+    padding: 0px 50px 33px 80.5px;
+    right: 250px;
+    border: 1px solid  #aaaaaa;
+    overflow: hidden;
+}
+
+.art{
+
+    width: 200px;
+    display: inline-block;
+    vertical-align: left;
+    padding: 0% 20% 10% 0%;
+    border: 1px solid  #aaaaaa;
+    border-bottom: none;  
+   
+         .play_pause {
+            vertical-align: middle;
+        svg{
+        fill:rgba(255,60,0,0.50);
+
+        }
+
+    }    
+
+    a img{
+        left: 30px;
+        
+        width: 100px;
+        height: 100px;
+
+    }
+    
+}
+
+
+.bottom_bar {
+    width: 100%;
+    margin: 0% 0% 0% 0%;
+    border: 1px solid  #aaaaaa;
+    padding: 2.5%;
+    font-size: 1rem;
+    font-family: verdana;
+
+    .icon_bottom{
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+        width: 20%;
+        fill: #666;
+        line-height: 50px;
+
+        svg{
+            fill: rgb(255,60, 0);
+            height: 50px;
+        }
+    }
+}
+
+
+
+
+
+
