@@ -43,8 +43,22 @@ var React = require('react')
 var apikey = '5b8f3d60c3820482bc3fdef04ffdde6f'
 var qs = (s, d) => (d || document).querySelector(s)
 
+var SoundCloudModel = Backbone.Model.extend({
+
+})
+
 var SoundcloudCollection = Backbone.Collection.extend({
-    url: `https://api.soundcloud.com/tracks?client_id=${apikey}&limit=1`
+    model: SoundCloudModel,
+    initialize: function(optionsObj){
+        this.options = optionsObj || ""
+        console.log('please console log me!!!!')
+        console.log(this.url())
+    },
+
+    url: function() {
+        return `https://api.soundcloud.com/tracks?client_id=${apikey}&limit=10&q=${this.options.searchQuery}`
+    }
+
 })
 
 SC.initialize({});
@@ -55,12 +69,19 @@ SC.stream("/tracks/293", function(sound){
   sound.play();
 });
 
+
+
+
 class SoundcloudItem extends React.Component {
     constructor(props){
         super(props)
     }
     render(){
             
+  
+
+
+
             var music_url = 'https://api.soundcloud.com/tracks.json?client_id=5b8f3d60c3820482bc3fdef04ffdde6f';
              if(!(music_url)){ 
                 music_url = 'https://api.soundcloud.com/tracks/210097699.json?client_id=5b8f3d60c3820482bc3fdef04ffdde6f';
@@ -185,13 +206,88 @@ class SoundcloudItems extends React.Component {
     }
 }
 
-var collection = new SoundcloudCollection()
-React.render(<SoundcloudItems  items={collection} />, qs('.container'))
-collection.fetch().then(() => {
-    console.log(collection)
+
+class Search extends React.Component {
+    constructor(props){
+        super(props)
+        this.props.view_collection.on('change', () => this.forceUpdate())
+        this.state = {
+            searchString: " "
+        } 
+    }
+
+
+    handleChange(e){
+        console.log(e.target);
+        console.log(this);
+        console.log(this.refs.search_input.getDOMNode().value);
+        
+        var search_input_value = this.refs.search_input.getDOMNode().value
+
+        
+        var new_collection = new SoundcloudCollection({searchQuery: search_input_value})
+        console.log(new_collection)
+            new_collection.fetch().then((response) => {
+                console.log(response[0].title)
+                this.props.view_collection.reset()
+                console.log(this.props.view_collection);
+
+                this.props.view_collection.add(new_collection.models) 
+
+                console.log(this.props.view_collection);
+
+            })
+    }
+
+
+    render(){
+        
+        var models_array = this.props.view_collection.models 
+
+        return  <div>
+
+                <input type="text"  ref = 'search_input' onBlur={ this.handleChange.bind(this) } placeholder="Search Songs" />
+                    <ul> 
+                        { models_array.map(function(model){
+                            return <li>{model.get('title')} <a href={model.get('uri')}>{model.get('uri')}</a></li>
+                            })
+                        } 
+                    </ul>
+                </div>;
+    }
+}
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
+
+var sc_collection = new SoundcloudCollection({searchQuery: 'flume'})
+// React.render(<SoundcloudItems  items={collection} />, qs('.container'))
+
+sc_collection.fetch().then((response) => {
+    console.log(response)
+    console.log(sc_collection)
+
+    React.render(
+        <Search view_collection = {sc_collection}/>,
+        document.body
+    );
+
+
 })
 
-// var sc_url = `https://api.soundcloud.com/tracks?client_id=${apikey}`
+
+    // var sc_url = `https://api.soundcloud.com/tracks?client_id=${apikey}`
 //             var sound_url = 'https://api.soundcloud.com/tracks.json?client_id=5b8f3d60c3820482bc3fdef04ffdde6f';
 //             $.getJSON(url, function(tracks) {
 //             $(tracks).each(function(track) {
