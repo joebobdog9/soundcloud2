@@ -51,8 +51,7 @@ var SoundcloudCollection = Backbone.Collection.extend({
     model: SoundCloudModel,
     initialize: function(optionsObj){
         this.options = optionsObj || ""
-        console.log('please console log me!!!!')
-        console.log(this.url())
+        
     },
 
     url: function() {
@@ -206,7 +205,6 @@ class SoundcloudItems extends React.Component {
     }
 }
 
-
 class Search extends React.Component {
     constructor(props){
         super(props)
@@ -232,51 +230,42 @@ class Search extends React.Component {
                 this.props.view_collection.reset()
                 console.log(this.props.view_collection);
 
-                this.props.view_collection.add(new_collection.models) 
-
-                console.log(this.props.view_collection);
-
+                this.props.view_collection.add(new_collection.models)
+                this.props.view_collection.options.searchQuery = search_input_value
+                this.setState({"searchString": search_input_value})
+                
             })
     }
 
 
     render(){
-        
-        var models_array = this.props.view_collection.models 
+
+        var soundcloud_group = this.props.view_collection.models.map( (model) => {
+
+            return <SoundcloudItem item={model}/>
+         } )
 
         return  <div>
 
                 <input type="text"  ref = 'search_input' onBlur={ this.handleChange.bind(this) } placeholder="Search Songs" />
-                    <ul> 
-                        { models_array.map(function(model){
-                            return <li>{model.get('title')} <a href={model.get('uri')}>{model.get('uri')}</a></li>
-                            })
-                        } 
-                    </ul>
+                
+
+                    {soundcloud_group}
                 </div>;
     }
 }
 
 
 
-
-
-
-
-
-
-       
-
-
-
-
-
 var sc_collection = new SoundcloudCollection({searchQuery: 'flume'})
+// var collection = new SoundcloudCollection()
 // React.render(<SoundcloudItems  items={collection} />, qs('.container'))
 
 sc_collection.fetch().then((response) => {
-    console.log(response)
+  
     console.log(sc_collection)
+
+    
 
     React.render(
         <Search view_collection = {sc_collection}/>,
