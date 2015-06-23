@@ -43,9 +43,11 @@ var React = require('react')
 var apikey = '5b8f3d60c3820482bc3fdef04ffdde6f'
 var qs = (s, d) => (d || document).querySelector(s)
 
+
 var SoundCloudModel = Backbone.Model.extend({
 
 })
+
 
 var SoundcloudCollection = Backbone.Collection.extend({
     model: SoundCloudModel,
@@ -64,22 +66,71 @@ SC.initialize({});
 
 
 
-SC.stream("/tracks/293", function(sound){
-  sound.play();
-});
-
-
-
-
 class SoundcloudItem extends React.Component {
     constructor(props){
         super(props)
+        this.sc_player = null
+        this.state = {  
+            isPlaying: false
+
+        }
+
+
     }
+
+    
+    handle_play_pause(){
+       
+
+        
+
+            //if song is playing => setState isPlaying:false  ,  pause() the player
+            if(this.state.isPlaying === true){
+                this.setState({
+                    isPlaying: false
+                })   
+
+                this.sc_player.pause();
+                console.log("should be pasued");
+            //if song is NOT playing => play song
+            } else {
+
+                if ( this.sc_player === null ){
+                    var track_id = this.props.item.get('id')
+                    
+                        SC.stream(
+                            `/tracks/${track_id}`, 
+                            (soundObj) => {
+                                this.sc_player = soundObj
+                                this.sc_player.play();
+                                this.setState({
+                                    isPlaying: true
+
+
+                                 })
+                         } 
+                    )
+
+                } else { 
+                    this.setState({
+                        isPlaying: true
+                    })
+
+                    this.sc_player.play();
+                }
+                
+            }        
+
+    }
+
+
+
+
     render(){
             
-  
 
 
+            var track_id = this.props.item.get('id')
 
             var music_url = 'https://api.soundcloud.com/tracks.json?client_id=5b8f3d60c3820482bc3fdef04ffdde6f';
              if(!(music_url)){ 
@@ -119,7 +170,7 @@ class SoundcloudItem extends React.Component {
         return (
             <div>
                 <div className="art">
-                    <div className="play_pause"> 
+                    <div  className="play_pause" onClick={this.handle_play_pause.bind(this)}  > 
                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px"
                              viewBox="0 0 24 24" enable-background="new 0 0 24 24" >
                         <path d="M10,16.5l6-4.5l-6-4.5V16.5z M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10S17.5,2,12,2z M12,20c-4.4,0-8-3.6-8-8
@@ -241,14 +292,12 @@ class Search extends React.Component {
     render(){
 
         var soundcloud_group = this.props.view_collection.models.map( (model) => {
-
             return <SoundcloudItem item={model}/>
          } )
 
         return  <div>
 
                 <input type="text"  ref = 'search_input' onBlur={ this.handleChange.bind(this) } placeholder="Search Songs" />
-                
 
                     {soundcloud_group}
                 </div>;
